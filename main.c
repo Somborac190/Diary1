@@ -121,7 +121,7 @@ void addRecord()
         fscanf(fp, "%s", time);
         rewind(fp);
 
-        while(fread(fp, &record, sizeof(record), 1) == 1)
+        while(fread(&record, sizeof(record), 1, fp) == 1)
         {
             if(strcmp(record.time, time) == 0)
             {
@@ -154,7 +154,7 @@ void addRecord()
     }
 
     fclose(fp);
-    pritnf("\n\tPress any key to exit...");
+    printf("\n\tPress any key to exit...");
     getch();
 
 }
@@ -192,7 +192,7 @@ void viewRecord()
         printf("\n\t1.The whole record of the day.");
         printf("\n\t2.Record of fixed time.");
         printf("\n\t\tEnter your choice:");
-        fscanf(fpt, "%s", &ch);
+        fscanf(fpt, "%d", &ch);
         switch(ch)
         {
             case 1:
@@ -212,7 +212,7 @@ void viewRecord()
             case 2:
             fflush(stdin);
             printf("\nEnter time:[hh:mm]:");
-            fgets(fpt, 6, time);
+            fgets(time, 6, fpt);
             while(fread(&customer, sizeof(customer), 1, fpt) == 1)
             {
                 if(strcmp(customer.time, time) == 0)
@@ -230,7 +230,7 @@ void viewRecord()
             default:
             printf("\n\nYou typed something else...");
             fflush(stdin);
-            fscanf(fpt, "%c", choice);
+            fscanf(fpt, "%c", &choice);
         }
     }while(choice == 'y' || choice == 'Y');
 
@@ -245,8 +245,8 @@ void editRecord()
     system("CLS");
     FILE *fpt;
     struct Record customer;
-    char time[6], choice, fileName[14];
-    int num, count = 0;
+    char time[6], fileName[14];
+    int num, count = 0, choice;
     printf("\n\t******************************");
     printf("\n\t*WELCOME TO THE EDITING MENU*");
     printf("\n\t******************************");
@@ -333,7 +333,7 @@ void editRecord()
                         printf("\nNew meeting person");
                         fgets(customer.name, 10, fpt);
                         printf("\nNew meeting place");
-                        fgest(customer.place, 10, fpt);
+                        fgets(customer.place, 10, fpt);
                         printf("New duration");
                         fgets(customer.duration, 10, fpt);
                         printf("\nNew note");
@@ -374,12 +374,12 @@ void editRecord()
             printf("\nNote:%s", customer.note);
             fclose(fpt);
             printf("\nWould you like to edit another record?(Y / N)");
-            fscanf("%c", &choice);
+            fscanf(fpt, "%d", &choice);
             count++;
         }else{
             printf("\nThe record doesn`t exist");
             printf("\nWould you like to try again?");
-            fscanf("%c", &choice);
+            fscanf(fpt, "%d", &choice);
         }
 
     }while(choice == 'Y' || choice == 'y');
@@ -667,7 +667,7 @@ void deleteRecord()
                 //open record object for reading and deleting
                 printf("\n\tEnter the time of record to be deleted:");
                 fflush(stdin);
-                gets(time);
+                fgets(time, 6, pFile);
 
                 //while reading compare times and write new time,
                 //close both pointers, remove first file, rename second file
@@ -693,7 +693,7 @@ void deleteRecord()
         //ask for another action
         printf("\n\tWould you like to delete another record(Y / N):");
         fflush(stdin);
-        scanf("%d", choice);
+        scanf("%d", &choice);
 
     }
     //exit
