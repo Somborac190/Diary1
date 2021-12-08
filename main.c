@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
 
     //while true, show menu and switch(ch)
 
-    do  
+    while(1) 
     {
         printf("\n\tMAIN MENU");
         printf("\n\tADD RECORD[1]");
@@ -51,38 +51,41 @@ int main(int argc, char const *argv[])
         printf("\n\tDELETE RECORD[4]");
         printf("\n\tEDIT PASSWORD[5]");
         printf("\n\tEXIT[6]");
+        //FILE *fMain;
+        printf("\n\tEnter your choice:");
+        scanf("%d", &ch);
 
         switch(ch)
         {
             case 1:
-            addRecord();
-            break;
+                addRecord();
+                break;
             case 2:
-            viewRecord();
-            break;
+                viewRecord();
+                break;
             case 3:
-            editRecord();
-            break;
+                editRecord();
+                break;
             case 4:
-            deleteRecord();
-            break;
+                deleteRecord();
+                break;
             case 5:
-            editPassword();
-            break;
+                editPassword();
+                break;
             case 6:
-            printf("\n\tThank you for using software");
-            getch();
-            exit(0);
+                printf("\n\tThank you for using software");
+                getch();
+                exit(0);
             default:
-            printf("\n\tYou entered wrong choice...");
-            printf("\n\tPress any key to try again");
-            getch();
-            break;
+                printf("\n\tYou entered wrong choice...");
+                printf("\n\tPress any key to try again");
+                getch();
+                break;
         }
         system("CLS");
 
     }
-    while(1);
+    
     
     return 0;
 }
