@@ -33,7 +33,55 @@ struct Record{
 
 int main(int argc, char const *argv[])
 {
-    /* code */
+    //int ch for switch statement
+    int ch;
+
+    printf("\n\t******************************************");
+    printf("\n\t*PASSWORD PROTECTED PERSONAL DIARY*");
+    printf("\n\t******************************************");
+
+    //while true, show menu and switch(ch)
+
+    while(1)
+    {
+        printf("\n\tMAIN MENU");
+        printf("\n\tADD RECORD[1]");
+        printf("\n\tVIEW RECORD[2]");
+        printf("\n\tEDIT RECORD[3]");
+        printf("\n\tDELETE RECORD[4]");
+        printf("\n\tEDIT PASSWORD[5]");
+        printf("\n\tEXIT[6]");
+
+        switch(ch)
+        {
+            case 1:
+            addRecord();
+            break;
+            case 2:
+            viewRecord();
+            break;
+            case 3:
+            editRecord();
+            break;
+            case 4:
+            deleteRecord();
+            break;
+            case 5:
+            editPassword();
+            break;
+            case 6:
+            printf("\n\tThank you for using software");
+            getch();
+            exit(0);
+            default:
+            printf("\n\tYou entered wrong choice...");
+            printf("\n\tPress any key to try again");
+            getch();
+            break;
+        }
+        system("CLS");
+
+    }
     return 0;
 }
 
@@ -529,5 +577,140 @@ void editPassword()
 
 void deleteRecord()
 {
+    //two pointers for files-second for temp file
+
+    //placeholders for:struct record, filename, password, 
+    //choice-delete record or by time
+    //check-checks password
+    //time-search by time
+
+    system("CLS");
+    FILE *pFile, *tFile;
+    struct Record file;
+    char fileName[15] = {}, another = 'Y', time[10] = {};
+    int choice, check;
+
+    printf("\n\t****************************************");
+    printf("\n\t\t *WELCOME TO DELETE MENU*");
+    printf("\n\t****************************************");
+
+    //check inserted password
+    check = password();
+    if(check == 1)
+    {
+        return;
+    }
+
+    //while-choose do you want to delete whole record or 
+    //specific by time
+
+    while(another == 'Y')
+    {
+        printf("\n\tHow would you like to delete?");
+        printf("\n\tDelete whole record[1]");
+        printf("\n\tDelete a particular record by time[2]");
+
+        do{
+            //enter your choice 
+            printf("\n\tEnter your choice:");
+            scanf("%d", &choice);
+
+            //switch choice 
+            switch(choice)
+            {
+                //enter filename for deletion
+                case 1:
+                printf("\n\tEnter the date of record to be deleted:[yyyy-mm-dd]:");
+                fflush(stdin);
+                fgets(fileName, 15, pFile);
+                pFile = fopen(fileName, "wb");
+                //check if filename exist
+                if(pFile == NULL)
+                {
+                    printf("\tRecord doesn`t exist");
+                    printf("\tPress any key to go back...");
+                    getch();
+                    return;
+                }
+                //close stream, remove filename, break
+                fclose(pFile);
+                remove(fileName);
+                printf("\nDeleted succesfully...");
+                break;
+
+                //enter filename
+                case 2:
+                printf("\n\tEnter the date of record:[yyyy-mm-dd]:");
+                fflush(stdin);
+                fgets(fileName, 15, pFile);
+                pFile = fopen(fileName,"rb");
+                //check if record exist using pointer
+                if(pFile == NULL)
+                {
+                    printf("\nFile doesn`t exist");
+                    printf("\nPress any key to go back...");
+                    getch();
+                    return; //exit from function
+                }
+
+                //open temp file for binary writing
+                tFile = fopen("temp", "wb");
+                //check if opening succesfull
+                if(tFile == NULL)
+                {
+                    printf("\nSystem error");
+                    printf("\nPress any key to go back...");
+                    getch();
+                    return;
+                }
+
+                //open record object for reading and deleting
+                printf("\n\tEnter the time of record to be deleted:");
+                fflush(stdin);
+                gets(time);
+
+                //while reading compare times and write new time,
+                //close both pointers, remove first file, rename second file
+                while(fread(&file, sizeof(file), 1, pFile) == 1)
+                {
+                    if(strcmp(file.time, time) != 0)
+                    {
+                        fwrite(&file, sizeof(file), 1, tFile);
+                    }
+
+                    fclose(pFile);
+                    fclose(tFile);
+                    remove(fileName);
+                    rename("temp", fileName);
+                    printf("\nDeleted succesfully...");
+                    break;
+                }
+                default:
+                printf("\n\tYou entered wrong choice...");
+                break;
+            }
+        }while(choice < 1 || choice > 2);
+        //ask for another action
+        printf("\n\tWould you like to delete another record(Y / N):");
+        fflush(stdin);
+        scanf("%d", choice);
+
+    }
+    //exit
+    printf("\n\tPress any key to exit...");
+    getch();
 
 }
+
+                
+
+
+
+    
+
+
+
+
+
+
+
