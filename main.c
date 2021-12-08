@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
 
     //while true, show menu and switch(ch)
 
-    while(1)
+    do  
     {
         printf("\n\tMAIN MENU");
         printf("\n\tADD RECORD[1]");
@@ -82,6 +82,8 @@ int main(int argc, char const *argv[])
         system("CLS");
 
     }
+    while(1);
+    
     return 0;
 }
 
@@ -250,7 +252,7 @@ void editRecord()
     printf("\n\t******************************");
     printf("\n\t*WELCOME TO THE EDITING MENU*");
     printf("\n\t******************************");
-    choice = password;
+    choice = password();
     if(choice != 0)
     {
         return;
